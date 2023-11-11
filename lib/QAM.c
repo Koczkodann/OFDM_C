@@ -1,52 +1,47 @@
-#include <stdio.h>
-#include <math.h>
-#include <stdlib.h>
+void qamModulation(int nBits,int* input, float* output,int inputNum)
+{
+	int numBit;
+	if(nBits == 1){
+		for(numBit = 0; numBit < inputNum; numBit++){
+			output[numBit] = ((float)input[numBit] * 2) - 1;
+		}
+	}
+}
 
-#define PI 3.1415
-
-//BPSK (QAM2)
-const int qamNumber = 2;
-const int nBits = 1;
-const float constellation[2][2] = {
-    {-1, 0}, {1, 0}
-};
-
-//QAM16
-/*
-int qamNumber = 16;
-int nBits = 4;
-const float constellation[16][2] = {
-    {-3, 3}, {-1, 3}, {1, 3}, {3, 3},
-    {-3, 1}, {-1, 1}, {1, 1}, {3, 1},
-    {-3, -1}, {-1, -1}, {1, -1}, {3, -1},
-    {-3, -3}, {-1, -3}, {1, -3}, {3, -3}
-};*/
 
 //MODULACJA QAM
-void qamModulation(int* input, float* outputSignal, int inputNum) {
-    int i, j;
+//TODO
+/*void qamModulation(int QAM_num,int* input, float* outputSignal, int inputNum) {
+    int i;
     float I, Q;
+    float constellation[16][2];
+
+    	if(QAM_num == 2){
+    		printf("BPSK");
+    		memcpy (constellation, constellation2, sizeof(constellation2));
+    	}
+    	else if(QAM_num == 4){
+    		printf("QPSK");
+    		memcpy (constellation, constellation4, sizeof(constellation4));
+    	}
+    	else if(QAM_num == 8){
+    		printf("QAM8");
+    		memcpy (constellation, constellation8, sizeof(constellation8));
+    	}
+    	else{
+    		printf("QAM16");
+    		memcpy (constellation, constellation16, sizeof(constellation16));
+    	}
     
     for (i = 0; i < inputNum; i++) {
         I = constellation[input[i]][0];
         Q = constellation[input[i]][1];
-        outputSignal[i] = I * cos(2 * PI * i / inputNum) + Q * sin(2 * PI * i / inputNum);
+
+        printf("I:\n");
+        printf("%f ", I);
+        printf("Q:\n");
+        printf("%f ", Q);
+
+        outputSignal[i] = I * cos(2 * M_PI * i / inputNum) - Q * sin(2 * M_PI * i / inputNum);
     }
-}
-
-int main() {
-    //int input[] = {7, 12, 2, 4, 9, 15, 6, 1}; //QAM 16
-    int input[] = {0, 1, 0, 1, 1, 1, 0, 1};    //QAM2
-    int inputNum = sizeof(input) / sizeof(input[0]);
-
-    float outputSignal[inputNum];
-    qamModulation(input, outputSignal, inputNum);
-
-    // Print the modulated signal
-    printf("QAM modulation:\n");
-    for (int i = 0; i < inputNum; i++) {
-        printf("%f ", outputSignal[i]);
-    }
-
-    return 0;
-}
+}*/
