@@ -22,16 +22,30 @@ int main() {
 	float cp = guardSamples;
 	/// Koniec parametrow
 
+	//Modulacja QAM
+    float trainSequence[inputLen];
+    qamModulation(1, input, trainSequence, inputLen);
+    //Kooniec modulacji QAM
 
-    float outputSignal[inputLen];
-    qamModulation(1, input, outputSignal, inputLen);
 
+    int buffNumber = ceil((float)inputLen/(float)noSubcarriers);
+    float trainBuffer[(int)buffNumber][noSubcarriers];
 
+    for(int i = 0; i < buffNumber; i++){
+    	for(int j = 0; j < noSubcarriers; j++){
+    		if(j+i*noSubcarriers<inputLen){
+    			trainBuffer[i][j]=trainSequence[j+i*noSubcarriers];
+    			//printf("%f ", trainBuffer[i][j]);
+    		}
+    		else
+    			break;
+    	}
+    }
 
     // Print the modulated signal
     printf("QAM modulation:\n");
     for (int i = 0; i < inputLen; i++) {
-        printf("%f ", outputSignal[i]);
+        printf("%f ", trainBuffer[0][i]);
     }
 
     return 0;
