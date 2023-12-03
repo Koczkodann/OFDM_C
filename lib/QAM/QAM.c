@@ -1,13 +1,22 @@
-void qamModulation(int nBits,int* input, float* output,int inputNum)
+void bpskModulation(int nBits,float* input, float* output,int inputNum)
 {
 	int numBit;
 	if(nBits == 1){
 		for(numBit = 0; numBit < inputNum; numBit++){
-			output[numBit] = ((float)input[numBit] * 2) - 1;
+			output[numBit] = round(((float)input[numBit] * 2) - 1);
 		}
 	}
 }
 
+void bpskDemodulation(int nBits,float* input, float* output,int inputNum)
+{
+	int numBit;
+	if(nBits == 1){
+		for(numBit = 0; numBit < inputNum; numBit++){
+			output[numBit] = round(((float)input[numBit] + 1)/2);
+		}
+	}
+}
 
 //MODULACJA QAM
 //TODO

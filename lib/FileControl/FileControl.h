@@ -11,7 +11,7 @@
 #include <stdio.h>
 
 int checkFileLenght(char *filename);
-void loadFile(int *output, char *filename);
+void loadFile(float *output, char *filename);
 void saveFile(float *input, char *filename);
 
 

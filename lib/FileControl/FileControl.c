@@ -11,7 +11,7 @@ int checkFileLenght(char *filename)
 	else
 	{
 		while(fgetc(in) != EOF){
-			numChar++;
+			numChar = numChar + 1;
 		}
 	}
 
@@ -19,21 +19,22 @@ int checkFileLenght(char *filename)
 	return numChar+1;
 }
 
-void loadFile(int *output, char *filename)
+void loadFile(float *output, char *filename)
 {
 	char ch;
 	int numChar = 0;
 	FILE *in = fopen(filename, "r");
+
 	if(in == NULL)
 		{
 			printf("Error: could not open file: %s", filename);
 		}
 		else
 		{
-			while(ch = fgetc(in) != EOF)
+			while((ch = fgetc(in)) != EOF)
 			{
-				output[numChar]=ch;
-				numChar++;
+				output[numChar]=ch - '0';
+				numChar = numChar + 1;
 			}
 		}
 	fclose(in);

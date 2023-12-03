@@ -2,6 +2,7 @@
 #define LIB_QAM_H_
 
 #include <stdio.h>
+#include <math.h>
 
 void qamModulation(int nBits,int* input, float* output,int inputNum);
 
