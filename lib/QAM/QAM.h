@@ -3,9 +3,12 @@
 
 #include <stdio.h>
 #include <math.h>
+#include "../kissfft/kiss_fft.h"
 
-void qamModulation(int nBits,int* input, float* output,int inputNum);
+void bpskModulation(int nBits, float *input, float *output,int inputNum);
+void bpskDemodulation(int nBits, kiss_fft_cpx* input, kiss_fft_cpx* output,int inputNum);
 
+/*
 //BPSK (QAM2)
 const int nBits2 = 1;
 const float constellation2[2][2] = {
@@ -35,6 +38,6 @@ const float constellation16[16][2] = {
     {-3, 1}, {-1, 1}, {1, 1}, {3, 1},
     {-3, -1}, {-1, -1}, {1, -1}, {3, -1},
     {-3, -3}, {-1, -3}, {1, -3}, {3, -3}
-};
+};*/
 
 #endif
