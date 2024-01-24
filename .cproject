@@ -37,11 +37,11 @@
 							</tool>
 						</toolChain>
 					</folderInfo>
-					<fileInfo id="0.193882741.1138881717" name="OFDM_gen.c" rcbsApplicability="disable" resourcePath="src/OFDM_gen.c" toolsToInvoke="cdt.managedbuild.tool.gnu.c.compiler.mingw.base.2008170155.305130599">
-						<tool id="cdt.managedbuild.tool.gnu.c.compiler.mingw.base.2008170155.305130599" name="GCC C Compiler" superClass="cdt.managedbuild.tool.gnu.c.compiler.mingw.base.2008170155"/>
+					<fileInfo id="0.193882741.755745324" name="OFDM_rcv.c" rcbsApplicability="disable" resourcePath="src/OFDM_rcv.c" toolsToInvoke="cdt.managedbuild.tool.gnu.c.compiler.mingw.base.2008170155.257448709">
+						<tool id="cdt.managedbuild.tool.gnu.c.compiler.mingw.base.2008170155.257448709" name="GCC C Compiler" superClass="cdt.managedbuild.tool.gnu.c.compiler.mingw.base.2008170155"/>
 					</fileInfo>
 					<sourceEntries>
-						<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name=""/>
+						<entry excluding="src/OFDM_gen.c" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name=""/>
 					</sourceEntries>
 				</configuration>
 			</storageModule>
