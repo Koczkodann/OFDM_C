@@ -3,10 +3,6 @@
 #include "../lib/kissfft/kiss_fft.h"
 #include "../lib/ModMat/ModMat.h"
 
-//funkcje dodatkowe
-//void fftShift(float **input, int size1, int size2);
-//float** zeros(float **input, int size1, int size2, int nZeros);
-
 /// Parametry modulacji
 int bandWidth = 5000;  //szerokosc pasma
 int sampFreq = 96000;  //czestotliwosc probkowania
@@ -19,12 +15,10 @@ int main() {
 	/// LOADING BINARY FILE
     char *filename = "data.txt";
     char *outname = "dataOut.txt";
-    float *input[checkFileLenght(filename)];
+    float *input = malloc(checkFileLenght(filename) * sizeof(float));
     loadFileBin(input, filename);
 
-
-    int inputLen = sizeof(input) / sizeof(input[0]);
-
+    int inputLen = checkFileLenght(filename);
 
 	/// Parametry dla OFDM
 	float bOFDMch = floor((float)bandWidth/(float)noSubcarriers);
@@ -32,7 +26,7 @@ int main() {
 
 	float guardSamples = ceil(nOFDMch/(float)cpIndex);
 	int nZeros = (nOFDMch - noSubcarriers)/2;
-	int cp = guardSamples;
+	int cp = guardSamples+1;
 	float packetsNum = ceil((float)inputLen/(float)noSubcarriers);
 	/// Koniec parametrow
 
@@ -58,15 +52,14 @@ int main() {
     	}
     }
 
+
 	kiss_fft_cpx **spectrumTable = (kiss_fft_cpx **)malloc(packetsNum * sizeof(kiss_fft_cpx*));
     for (int i = 0; i < packetsNum; i++) {
         spectrumTable[i] = (kiss_fft_cpx *)malloc((noSubcarriers + 2*nZeros) * sizeof(kiss_fft_cpx));
     }
 
-
     zeros(trainBuffer, spectrumTable, packetsNum, noSubcarriers, nZeros);
     fftShift(spectrumTable, packetsNum, noSubcarriers + 2*nZeros);
-
 
     // Konfiguracja IFFT
     kiss_fft_cfg cfg_inv = kiss_fft_alloc(noSubcarriers + 2 * nZeros, 1, NULL, NULL);
@@ -95,22 +88,22 @@ int main() {
         guarded[i] = (kiss_fft_cpx *)malloc((noSubcarriers + 2 * nZeros + cp) * sizeof(kiss_fft_cpx));
     }
 
-    /// DODANIE PREFIXU CYKLICZNEGO
+    /// DODANIE PREFIXU CYKLICZNEGO i wyskalowanie w stosunku do matlab
     for (int i = 0; i < packetsNum; i++){
     	for (int j = 0; j <noSubcarriers + 2 * nZeros + cp; j++){
     		if(j <= cp){
-    		guarded[i][j].r = ifftOutput[i][noSubcarriers + 2 * nZeros - cp + j].r;
-    		guarded[i][j].i = ifftOutput[i][noSubcarriers + 2 * nZeros - cp + j].i;
+    		guarded[i][j].r = ifftOutput[i][noSubcarriers + 2 * nZeros - cp + j].r/1232;
+    		guarded[i][j].i = ifftOutput[i][noSubcarriers + 2 * nZeros - cp + j].i/1232;
     		}
     		if(j > cp){
-    		guarded[i][j].r = ifftOutput[i][j - cp].r;
-    		guarded[i][j].i = ifftOutput[i][j - cp].i;
+    		guarded[i][j].r = ifftOutput[i][j - cp].r/1232;
+    		guarded[i][j].i = ifftOutput[i][j - cp].i/1232;
     		}
     	}
     }
 
     /// ZAPIS DO PLIKU WYJŒCIOWEGO
-    saveFile(guarded, outname, packetsNum, noSubcarriers + 2 * nZeros + cp);
+    saveFile(guarded, outname, packetsNum, noSubcarriers + 2 * nZeros + cp+1);
 
 
     //DEBUG
@@ -127,6 +120,7 @@ int main() {
     }*/
 
     /// FREEING ALL ALOCATED MEMORY
+    free(input);
     free(trainSequence);
     for (int i = 0; i < packetsNum; i++) {
         free(trainBuffer[i]);
@@ -146,7 +140,8 @@ int main() {
         free(guarded[i]);
     }
     free(guarded);
-    free(cfg_inv);
+    kiss_fft_free(cfg_inv);
 
     return 0;
 }
+
