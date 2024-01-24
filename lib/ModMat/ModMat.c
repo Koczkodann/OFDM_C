@@ -11,13 +11,13 @@ void fftShift(kiss_fft_cpx **input, int size1, int size2) {
         }
 
         for (int j = size2 - shift, k = 0; j < size2; j++, k++) {
-            temp[j].r = input[i][k].i;
-            temp[j].r = input[i][k].i;
+            temp[j].r = input[i][k].r;
+            temp[j].i = input[i][k].i;
         }
 
         for (int j = 0; j < size2; j++) {
-            input[i][j].r = temp[j].i;
-            input[i][j].r = temp[j].i;
+            input[i][j].r = temp[j].r;
+            input[i][j].i = temp[j].i;
         }
     }
 }

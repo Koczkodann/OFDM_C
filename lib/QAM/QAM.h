@@ -6,7 +6,7 @@
 #include "../kissfft/kiss_fft.h"
 
 void bpskModulation(int nBits, float *input, float *output,int inputNum);
-void bpskDemodulation(int nBits, kiss_fft_cpx* input, kiss_fft_cpx* output,int inputNum);
+void bpskDemodulation(int nBits, float *input, float *output,int inputNum);
 
 /*
 //BPSK (QAM2)

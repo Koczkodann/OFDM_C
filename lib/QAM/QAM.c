@@ -10,12 +10,12 @@ void bpskModulation(int nBits, float *input, float *output,int inputNum)
 	}
 }
 
-void bpskDemodulation(int nBits, kiss_fft_cpx* input, kiss_fft_cpx* output,int inputNum)
+void bpskDemodulation(int nBits, float *input, float *output,int inputNum)
 {
 	int numBit;
 	if(nBits == 1){
 		for(numBit = 0; numBit < inputNum; numBit++){
-			output[numBit].r = round(((float)input[numBit].r + 1)/2);
+			output[numBit] = round(((float)input[numBit] + 1)/2);
 		}
 	}
 }
