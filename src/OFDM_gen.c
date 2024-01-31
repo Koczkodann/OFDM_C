@@ -1,7 +1,11 @@
+#include <time.h>
 #include "../lib/QAM/QAM.h"
 #include "../lib/FileControl/FileControl.h"
 #include "../lib/kissfft/kiss_fft.h"
 #include "../lib/ModMat/ModMat.h"
+
+///Funkcje Testowe
+void addChannelNoise(kiss_fft_cpx **input, int size1, int size2, float snr_dB);
 
 /// Parametry modulacji
 int bandWidth = 5000;  //szerokosc pasma
@@ -102,6 +106,7 @@ int main() {
     	}
     }
 
+    addChannelNoise(guarded, packetsNum, noSubcarriers + 2 * nZeros + cp, 1);
     /// ZAPIS DO PLIKU WYJŒCIOWEGO
     saveFile(guarded, outname, packetsNum, noSubcarriers + 2 * nZeros + cp+1);
 
@@ -145,3 +150,31 @@ int main() {
     return 0;
 }
 
+void addChannelNoise(kiss_fft_cpx **input, int size1, int size2, float snr_dB) {
+    // Ustawienie ziarna generatora liczb pseudolosowych
+    srand(time(NULL));
+
+    // Obliczanie mocy sygna³u
+    float signalPower = 0.0;
+    for (int i = 0; i < size1; i++) {
+        for (int j = 0; j < size2; j++) {
+            signalPower += pow(input[i][j].r, 2) + pow(input[i][j].i, 2);
+        }
+    }
+    signalPower /= (size1 * size2);
+
+    // Obliczanie mocy szumu na podstawie SNR
+    float snr_linear = pow(10, snr_dB / 10);
+    float noisePower = signalPower / snr_linear;
+
+    // Dodawanie szumu gaussowskiego
+    for (int i = 0; i < size1; i++) {
+        for (int j = 0; j < size2; j++) {
+            float noiseReal = sqrt(noisePower / 2) * ((float)rand() / RAND_MAX) * (rand() % 2 ? 1 : -1);
+            float noiseImag = sqrt(noisePower / 2) * ((float)rand() / RAND_MAX) * (rand() % 2 ? 1 : -1);
+
+            input[i][j].r += noiseReal;
+            input[i][j].i += noiseImag;
+        }
+    }
+}

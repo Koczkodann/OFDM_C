@@ -13,8 +13,8 @@ int cpIndex = 5; //wspolczynnik dlugosci cyklicznego prefiksu
 int main() {
 
 	/// LOADING TEXT FILE
-    char *filename = "dataOut.txt";
-    char *outname = "2dataOut.txt";
+    char *filename = "SNR1.txt";
+    char *outname = "SNR1_OUT.txt";
     int inputLen = checkFileLenghtLine(filename);
     kiss_fft_cpx *input =(kiss_fft_cpx *)malloc((inputLen) * sizeof(kiss_fft_cpx));
     loadFileCpx(input,filename);
@@ -30,8 +30,6 @@ int main() {
     	int cp = guardSamples;
     	int packetsNum = ceil((float)inputLen/(((float)noSubcarriers) + 2*nZeros + cp))-1;
     /// Koniec parametrow
-
-    	printf("packetsNum: %d ", packetsNum);
 
     	kiss_fft_cpx **OFDMbaseband = (kiss_fft_cpx **)malloc(packetsNum*sizeof(kiss_fft_cpx*));
     	    for (int i = 0; i < packetsNum; i++){
@@ -104,14 +102,14 @@ int main() {
     	       bpskDemodulation(1, trainSequence, output, noSubcarriers*packetsNum);
 
     	       ///DEBUG
-    	       for(int i = 0; i < packetsNum; i++)
+    	       /*for(int i = 0; i < packetsNum; i++)
     	       {
     	          	for(int j = 0; j < noSubcarriers; j++)
     	          	{
     	          		printf("|%d - %d: ", i, j);
     	          		printf("%f ", output[i*noSubcarriers + j]);
     	          	}
-    	       }
+    	       }*/
 
     	       saveFileBin(output, outname, packetsNum, noSubcarriers);
 
